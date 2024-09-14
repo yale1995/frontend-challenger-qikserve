@@ -1,15 +1,13 @@
 'use client'
 
-import { WebSettings } from '@/@types/api-type'
+import { useTheme } from '@/app/hooks/use-theme'
 import { usePathname } from 'next/navigation'
 import { CSSProperties } from 'react'
 
-interface NavbarProps {
-  theme: WebSettings
-}
-
-export const Navbar = ({ theme }: NavbarProps) => {
+export const Navbar = () => {
   const pathname = usePathname()
+
+  const { theme } = useTheme()
 
   const navStyle: CSSProperties = {
     height: '3.25rem',
@@ -27,13 +25,11 @@ export const Navbar = ({ theme }: NavbarProps) => {
   const itemStyle = (path: string): CSSProperties => ({
     width: '14.5rem',
     lineHeight: '52px',
-    color: theme.backgroundColour,
+    color: 'var(--white)',
     textDecoration: 'none',
     fontSize: '1.25rem',
     borderBottom:
-      pathname === path
-        ? `5px solid ${theme.backgroundColour}`
-        : '5px solid transparent',
+      pathname === path ? `5px solid var(--white)` : '5px solid transparent',
     textAlign: 'center',
   })
 

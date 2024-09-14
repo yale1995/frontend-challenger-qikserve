@@ -1,17 +1,14 @@
+'use client'
+
 import { CSSProperties } from 'react'
 import { SearchIconRegular } from './icons'
-import { WebSettings } from '@/@types/api-type'
 
-interface SearchInputProps {
-  theme: WebSettings
-}
-
-export const SearchInput = ({ theme }: SearchInputProps) => {
+export const SearchInput = () => {
   const containerStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     borderRadius: '8px',
-    border: `1px solid ${theme.primaryColour}`,
+    border: `1px solid var(--gray-200)`,
     padding: '0 14px',
     gap: '14px',
     background: 'var(--white)',
