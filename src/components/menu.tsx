@@ -1,13 +1,15 @@
 'use client'
 
 import { useTheme } from '@/hooks/use-theme'
-import { CSSProperties } from 'react'
+import { CSSProperties, PropsWithChildren, ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronTopIconRegular } from './icons'
+import { useMenu } from '@/hooks/use-menu'
 
 export const MenuRestaurant = () => {
   const { theme } = useTheme()
+  const { menu } = useMenu()
 
   const containerStyles: CSSProperties = {
     background: theme.backgroundColour,
@@ -15,12 +17,62 @@ export const MenuRestaurant = () => {
     boxShadow: '0px 2px 14px 0px rgba(0, 0, 0, 0.15)',
   }
 
+  return (
+    <div style={containerStyles}>
+      <MenuTabs>
+        {menu.sections.map((section) => (
+          <TabItem
+            key={section.id}
+            href={`#${section.name}`}
+            label={section.name}
+            image={section.images[0].image}
+            isActive={section.name === 'Burgers'}
+          />
+        ))}
+      </MenuTabs>
+
+      {menu.sections.map((section) => (
+        <MenuSection key={section.id} title={section.name}>
+          {section.items.map((item) => (
+            <MenuItem
+              key={item.id}
+              price={`R$${item.price.toFixed(2)}`}
+              name={item.name}
+              description={item.description}
+              image={item.images && item.images[0] ? item.images[0].image : ''}
+            />
+          ))}
+        </MenuSection>
+      ))}
+    </div>
+  )
+}
+
+export const MenuTabs = ({ children }: PropsWithChildren) => {
   const tabsStyles: CSSProperties = {
     padding: '1.25rem 1rem 1.5rem',
     display: 'flex',
     alignItems: 'center',
     gap: '0.1875rem',
   }
+
+  return <section style={tabsStyles}>{children}</section>
+}
+
+interface TabItemProps {
+  href: string
+  label: string
+  image: string
+  isActive: boolean
+}
+
+export const TabItem = ({
+  href,
+  label,
+  image,
+  isActive = false,
+}: TabItemProps) => {
+  const { theme } = useTheme()
 
   const tabStyle: CSSProperties = {
     width: '6.5rem',
@@ -32,17 +84,17 @@ export const MenuRestaurant = () => {
   }
 
   const imageStyles: CSSProperties = {
-    width: '5.125rem',
-    height: '5.125rem',
+    width: '4.625rem',
+    height: '4.625rem',
     borderRadius: '100%',
+    objectFit: 'cover',
   }
 
   const activeImageStyles: CSSProperties = {
-    width: '5.125rem',
-    height: '5.125rem',
+    width: '4.625rem',
+    height: '4.625rem',
     borderRadius: '100%',
-    outline: `3px solid ${theme.primaryColour}`,
-    outlineOffset: '3px',
+    objectFit: 'cover',
   }
 
   const labelStyle: CSSProperties = {
@@ -64,6 +116,28 @@ export const MenuRestaurant = () => {
     borderBottom: `3px solid ${theme.primaryColour}`,
     color: theme.primaryColour,
   }
+
+  return (
+    <Link href={href} style={tabStyle}>
+      <Image
+        src={image}
+        alt={label}
+        style={isActive ? activeImageStyles : imageStyles}
+        width={82}
+        height={82}
+      />
+      <span style={isActive ? activeLabelStyle : labelStyle}>{label}</span>
+    </Link>
+  )
+}
+
+interface MenuSectionProps {
+  title: string
+  children: ReactNode
+}
+
+export const MenuSection = ({ title, children }: MenuSectionProps) => {
+  const { theme } = useTheme()
 
   const headingSectionStyles: CSSProperties = {
     display: 'flex',
@@ -95,6 +169,32 @@ export const MenuRestaurant = () => {
     color: theme.primaryColour,
   }
 
+  return (
+    <section id={title}>
+      <div style={headingSectionStyles}>
+        <h2 style={headingSectionLabelStyles}>{title}</h2>
+        <button style={headingSectionButtonStyles}>
+          <ChevronTopIconRegular style={headingSectionIconStyles} />
+        </button>
+      </div>
+      <ul>{children}</ul>
+    </section>
+  )
+}
+
+interface MenuItemProps {
+  name: string
+  description?: string
+  price: string
+  image?: string
+}
+
+export const MenuItem = ({
+  name,
+  description,
+  price,
+  image,
+}: MenuItemProps) => {
   const itemStyles: CSSProperties = {
     display: 'flex',
     alignItems: 'start',
@@ -118,6 +218,11 @@ export const MenuRestaurant = () => {
     fontWeight: '300',
     fontSize: '1rem',
     color: 'var(--gray-500)',
+
+    maxWidth: '424px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   }
 
   const itemInfoPriceStyles: CSSProperties = {
@@ -139,76 +244,23 @@ export const MenuRestaurant = () => {
   }
 
   return (
-    <div style={containerStyles}>
-      <section style={tabsStyles}>
-        <Link href="#burgers" style={tabStyle}>
+    <li style={itemStyles}>
+      <div style={itemInfoStyles}>
+        <span style={itemInfoLabelStyles}>{name}</span>
+        <p style={itemInfoDetailStyles}>{description}</p>
+        <span style={itemInfoPriceStyles}>{price}</span>
+      </div>
+      <div style={itemImageContainerStyles}>
+        {image && (
           <Image
-            src="https://github.com/yale1995.png"
-            alt="image"
-            style={activeImageStyles}
-            width={82}
-            height={82}
+            src={image}
+            alt={name}
+            style={itemImagemStyles}
+            width={128}
+            height={85}
           />
-
-          <span style={activeLabelStyle}>Burgers</span>
-        </Link>
-
-        <Link href="#drinks" style={tabStyle}>
-          <Image
-            src="https://github.com/yale1995.png"
-            alt="image"
-            style={imageStyles}
-            width={82}
-            height={82}
-          />
-
-          <span style={labelStyle}>Drinks</span>
-        </Link>
-
-        <Link id="tab" href="#desserts" style={tabStyle}>
-          <Image
-            src="https://github.com/yale1995.png"
-            alt="image"
-            style={imageStyles}
-            width={82}
-            height={82}
-          />
-
-          <span style={labelStyle}>Desserts</span>
-        </Link>
-      </section>
-
-      <section>
-        <div style={headingSectionStyles}>
-          <h2 style={headingSectionLabelStyles}>Burgers</h2>
-
-          <button style={headingSectionButtonStyles}>
-            <ChevronTopIconRegular style={headingSectionIconStyles} />
-          </button>
-        </div>
-
-        <ul>
-          <li style={itemStyles}>
-            <div style={itemInfoStyles}>
-              <span style={itemInfoLabelStyles}>Hardcore</span>
-              <p style={itemInfoDetailStyles}>
-                180g angus beef burger, plus ribs, gruyere cheese...
-              </p>
-              <span style={itemInfoPriceStyles}>R$33,00</span>
-            </div>
-
-            <div style={itemImageContainerStyles}>
-              <Image
-                src="https://github.com/yale1995.png"
-                alt="image"
-                style={itemImagemStyles}
-                width={128}
-                height={85}
-              />
-            </div>
-          </li>
-        </ul>
-      </section>
-    </div>
+        )}
+      </div>
+    </li>
   )
 }
