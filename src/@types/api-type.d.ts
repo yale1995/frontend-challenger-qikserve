@@ -89,4 +89,4 @@ interface Menu {
   sections: Section[]
 }
 
-export * from '.'
+export { Venue, WebSettings, Menu, Section, MenuItem, Modifier, Image }
