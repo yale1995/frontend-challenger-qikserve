@@ -1,6 +1,6 @@
 'use client'
 
-import { useTheme } from '@/app/hooks/use-theme'
+import { useTheme } from '@/hooks/use-theme'
 import { usePathname } from 'next/navigation'
 import { CSSProperties } from 'react'
 
