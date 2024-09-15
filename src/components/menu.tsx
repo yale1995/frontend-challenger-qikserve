@@ -6,8 +6,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronTopIconRegular } from './icons'
 import { useMenu } from '@/hooks/use-menu'
+import { Dialog } from './dialog'
 
 export const MenuRestaurant = () => {
+  const [isOpenDialog, setIsOpenDialog] = useState(false)
+
   const { theme } = useTheme()
   const { menu } = useMenu()
 
@@ -17,6 +20,14 @@ export const MenuRestaurant = () => {
     background: theme.backgroundColour,
     padding: '1.25rem 1rem',
     boxShadow: '0px 2px 14px 0px rgba(0, 0, 0, 0.15)',
+  }
+
+  const onOpenDialog = () => {
+    setIsOpenDialog(true)
+  }
+
+  const onCloseDialog = () => {
+    setIsOpenDialog(false)
   }
 
   return (
@@ -43,10 +54,13 @@ export const MenuRestaurant = () => {
               name={item.name}
               description={item.description}
               image={item.images && item.images[0] ? item.images[0].image : ''}
+              onOpen={onOpenDialog}
             />
           ))}
         </MenuSection>
       ))}
+
+      {isOpenDialog && <Dialog onClose={onCloseDialog} />}
     </div>
   )
 }
@@ -199,6 +213,7 @@ interface MenuItemProps {
   description?: string
   price: string
   image?: string
+  onOpen: () => void
 }
 
 export const MenuItem = ({
@@ -206,12 +221,14 @@ export const MenuItem = ({
   description,
   price,
   image,
+  onOpen,
 }: MenuItemProps) => {
   const itemStyles: CSSProperties = {
     display: 'flex',
     alignItems: 'start',
     justifyContent: 'space-between',
     padding: '1rem 0',
+    cursor: 'pointer'
   }
 
   const itemInfoStyles: CSSProperties = {
@@ -256,7 +273,7 @@ export const MenuItem = ({
   }
 
   return (
-    <li style={itemStyles}>
+    <li style={itemStyles} onClick={onOpen}>
       <div style={itemInfoStyles}>
         <span style={itemInfoLabelStyles}>{name}</span>
         {description && <p style={itemInfoDetailStyles}>{description}</p>}
