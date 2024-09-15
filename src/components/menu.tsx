@@ -9,9 +9,13 @@ import { useMenu } from '@/hooks/use-menu'
 import { Dialog } from './dialog'
 import { MenuItem as IMenuItem } from '@/@types/api-type'
 
+type SelectedItem = IMenuItem & {
+  sectionName: string
+}
+
 export const MenuRestaurant = () => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<IMenuItem | null>(null)
+  const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null)
 
   const { theme } = useTheme()
   const { menu } = useMenu()
@@ -29,7 +33,7 @@ export const MenuRestaurant = () => {
     setIsOpenDialog(false)
   }
 
-  const handleSelectItem = (item: IMenuItem) => {
+  const handleSelectItem = (item: SelectedItem | null) => {
     setSelectedItem(item)
     setIsOpenDialog(true)
   }
@@ -58,7 +62,9 @@ export const MenuRestaurant = () => {
               name={item.name}
               description={item.description}
               image={item.images && item.images[0] ? item.images[0].image : ''}
-              onOpen={() => handleSelectItem(item)}
+              onOpen={() =>
+                handleSelectItem({ ...item, sectionName: section.name })
+              }
             />
           ))}
         </MenuSection>
@@ -69,6 +75,7 @@ export const MenuRestaurant = () => {
           name={selectedItem?.name}
           description={selectedItem?.description}
           image={selectedItem?.images?.[0]?.image ?? ''}
+          section={selectedItem?.sectionName}
           onClose={handleCloseDialog}
         />
       )}

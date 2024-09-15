@@ -1,13 +1,14 @@
 'use client'
 
 import { useTheme } from '@/hooks/use-theme'
+import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { CSSProperties } from 'react'
 
 export const Navbar = () => {
   const pathname = usePathname()
-
   const { theme } = useTheme()
+  const t = useTranslations()
 
   const navStyle: CSSProperties = {
     height: '3.25rem',
@@ -37,13 +38,13 @@ export const Navbar = () => {
     <nav style={navStyle}>
       <div style={listItemsStyle}>
         <a href="/" style={itemStyle('/menu')}>
-          Menu
+          {t('navbar.menu')}
         </a>
         <a href="/sign-in" style={itemStyle('/sign-in')}>
-          Entrar
+          {t('navbar.sign-in')}
         </a>
         <a href="/contact" style={itemStyle('/contact')}>
-          Contato
+          {t('navbar.contact')}
         </a>
       </div>
     </nav>

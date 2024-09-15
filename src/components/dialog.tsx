@@ -2,17 +2,26 @@ import { useTheme } from '@/hooks/use-theme'
 import Image from 'next/image'
 import { ChangeEvent, CSSProperties, useState } from 'react'
 import { MinusIconRegular, PlusIconRegular, XIconRegular } from './icons'
+import { useTranslations } from 'next-intl'
 
 interface DialogProps {
   onClose: () => void
   name?: string
   description?: string
   image?: string
+  section?: string
 }
 
-export const Dialog = ({ onClose, description, name, image }: DialogProps) => {
+export const Dialog = ({
+  onClose,
+  description,
+  name,
+  image,
+  section,
+}: DialogProps) => {
   const [size, setSize] = useState(1)
   const { theme } = useTheme()
+  const t = useTranslations()
 
   const dialogOverlayStyles: CSSProperties = {
     position: 'fixed',
@@ -243,14 +252,18 @@ export const Dialog = ({ onClose, description, name, image }: DialogProps) => {
           </div>
 
           <div style={labelContainerStyles}>
-            <h3 style={labelTitleStyles}>Choose your size</h3>
-            <span style={labelDescriptionStyles}>Select 1 option</span>
+            <h3 style={labelTitleStyles}>{t('dialog.labelTitle')}</h3>
+            <span style={labelDescriptionStyles}>
+              {t('dialog.labelDescription')}
+            </span>
           </div>
 
           <form>
             <div style={inputContainerStyles}>
               <div>
-                <label style={inputLabelStyles}>1 meat</label>
+                <label style={inputLabelStyles}>
+                  1 {t(`dialog.${section?.toLowerCase()}`)}
+                </label>
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
@@ -265,7 +278,9 @@ export const Dialog = ({ onClose, description, name, image }: DialogProps) => {
 
             <div style={inputContainerStyles}>
               <div>
-                <label style={inputLabelStyles}>2 meats</label>
+                <label style={inputLabelStyles}>
+                  2 {t(`dialog.${section?.toLowerCase()}`)}s
+                </label>
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
@@ -280,7 +295,9 @@ export const Dialog = ({ onClose, description, name, image }: DialogProps) => {
 
             <div style={inputContainerStyles}>
               <div>
-                <label style={inputLabelStyles}>3 meats</label>
+                <label style={inputLabelStyles}>
+                  3 {t(`dialog.${section?.toLowerCase()}`)}s
+                </label>
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
@@ -295,7 +312,9 @@ export const Dialog = ({ onClose, description, name, image }: DialogProps) => {
 
             <div style={inputContainerStyles}>
               <div>
-                <label style={inputLabelStyles}>5 meats</label>
+                <label style={inputLabelStyles}>
+                  4 {t(`dialog.${section?.toLowerCase()}`)}s
+                </label>
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
@@ -310,7 +329,9 @@ export const Dialog = ({ onClose, description, name, image }: DialogProps) => {
 
             <div style={inputContainerStyles}>
               <div>
-                <label style={inputLabelStyles}>5 meats</label>
+                <label style={inputLabelStyles}>
+                  5 {t(`dialog.${section?.toLowerCase()}`)}s
+                </label>
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 

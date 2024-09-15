@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/contexts/theme-context'
 import { Menu, Venue } from '@/@types/api-type'
 import { ReactNode } from 'react'
 import { MenuProvider } from '@/contexts/menu-context'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -39,11 +41,19 @@ export default async function RootLayout({
     fetchData('https://cdn-dev.preoday.com/challenge/menu') as Promise<Menu>,
   ])
 
+  const locale = await getLocale()
+
+  const messages = await getMessages()
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={roboto.className}>
         <ThemeProvider themeData={venueData.webSettings}>
-          <MenuProvider menuData={menuData}>{children}</MenuProvider>
+          <MenuProvider menuData={menuData}>
+            <NextIntlClientProvider messages={messages}>
+              {children}
+            </NextIntlClientProvider>
+          </MenuProvider>
         </ThemeProvider>
       </body>
     </html>

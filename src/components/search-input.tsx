@@ -2,8 +2,11 @@
 
 import { CSSProperties } from 'react'
 import { SearchIconRegular } from './icons'
+import { useTranslations } from 'next-intl'
 
 export const SearchInput = () => {
+  const t = useTranslations()
+
   const containerStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -30,7 +33,7 @@ export const SearchInput = () => {
   return (
     <div style={containerStyle}>
       <SearchIconRegular style={iconStyle} />
-      <input placeholder="Search menu items" style={inputStyle} />
+      <input placeholder={t('searchInput.placeholder')} style={inputStyle} />
     </div>
   )
 }

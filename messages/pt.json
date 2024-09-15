@@ -1,0 +1,17 @@
+{
+  "navbar": {
+    "menu": "Cardápio",
+    "sign-in": "Entrar",
+    "contact": "Contato"
+  },
+  "searchInput": {
+    "placeholder": "Pesquise itens do menu"
+  },
+  "dialog": {
+    "labelTitle": "Escolha seu tamanho",
+    "labelDescription": "Selecione 1 opção",
+    "burgers": "carne",
+    "desserts": "unidade",
+    "drinks": "unidade"
+  }
+}
