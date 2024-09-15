@@ -95,6 +95,8 @@ export const TabItem = ({
     height: '4.625rem',
     borderRadius: '100%',
     objectFit: 'cover',
+    outline: `3px solid ${theme.primaryColour}`,
+    outlineOffset: '3px',
   }
 
   const labelStyle: CSSProperties = {
