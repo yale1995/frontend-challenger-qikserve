@@ -11,6 +11,8 @@ export const MenuRestaurant = () => {
   const { theme } = useTheme()
   const { menu } = useMenu()
 
+  const [activeTab, setActiveTab] = useState(menu.sections[0]?.name || '')
+
   const containerStyles: CSSProperties = {
     background: theme.backgroundColour,
     padding: '1.25rem 1rem',
@@ -26,7 +28,8 @@ export const MenuRestaurant = () => {
             href={`#${section.name}`}
             label={section.name}
             image={section.images[0].image}
-            isActive={section.name === 'Burgers'}
+            isActive={activeTab === section.name}
+            onClick={() => setActiveTab(section.name)}
           />
         ))}
       </MenuTabs>
@@ -64,6 +67,7 @@ interface TabItemProps {
   label: string
   image: string
   isActive: boolean
+  onClick: () => void
 }
 
 export const TabItem = ({
@@ -71,16 +75,17 @@ export const TabItem = ({
   label,
   image,
   isActive = false,
+  onClick,
 }: TabItemProps) => {
   const { theme } = useTheme()
 
   const tabStyle: CSSProperties = {
     width: '6.5rem',
     textDecoration: 'none',
-
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    cursor: 'pointer',
   }
 
   const imageStyles: CSSProperties = {
@@ -120,16 +125,18 @@ export const TabItem = ({
   }
 
   return (
-    <Link href={href} style={tabStyle}>
-      <Image
-        src={image}
-        alt={label}
-        style={isActive ? activeImageStyles : imageStyles}
-        width={82}
-        height={82}
-      />
+    <div style={tabStyle} onClick={onClick}>
+      <Link href={href}>
+        <Image
+          src={image}
+          alt={label}
+          style={isActive ? activeImageStyles : imageStyles}
+          width={82}
+          height={82}
+        />
+      </Link>
       <span style={isActive ? activeLabelStyle : labelStyle}>{label}</span>
-    </Link>
+    </div>
   )
 }
 
@@ -148,7 +155,6 @@ export const MenuSection = ({ title, children }: MenuSectionProps) => {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-
     paddingTop: '2rem',
     paddingBottom: '0.75rem',
   }
@@ -163,7 +169,6 @@ export const MenuSection = ({ title, children }: MenuSectionProps) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-
     background: 'none',
     border: '0',
     transform: isOpen ? 'rotate(0deg)' : 'rotate(180deg)',
