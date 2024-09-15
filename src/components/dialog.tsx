@@ -1,13 +1,17 @@
 import { useTheme } from '@/hooks/use-theme'
 import Image from 'next/image'
-import { CSSProperties } from 'react'
+import { ChangeEvent, CSSProperties, useState } from 'react'
 import { MinusIconRegular, PlusIconRegular, XIconRegular } from './icons'
 
 interface DialogProps {
   onClose: () => void
+  name?: string
+  description?: string
+  image?: string
 }
 
-export const Dialog = ({ onClose }: DialogProps) => {
+export const Dialog = ({ onClose, description, name, image }: DialogProps) => {
+  const [size, setSize] = useState(1)
   const { theme } = useTheme()
 
   const dialogOverlayStyles: CSSProperties = {
@@ -65,8 +69,8 @@ export const Dialog = ({ onClose }: DialogProps) => {
     position: 'relative',
     background: theme.backgroundColour,
     maxHeight: '25rem',
-    overflowY: 'scroll', 
-    scrollbarWidth: 'none', 
+    overflowY: 'scroll',
+    scrollbarWidth: 'none',
     msOverflowStyle: 'none',
   }
 
@@ -203,29 +207,39 @@ export const Dialog = ({ onClose }: DialogProps) => {
     outline: '0',
   }
 
+  const handleOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSize(Number(event.target.value))
+  }
+
+  const handleIncreaseSize = () => {
+    setSize((prev) => prev + 1)
+  }
+
+  const handleDecreaseSize = () => {
+    setSize((prev) => prev - 1)
+  }
 
   return (
     <div style={dialogOverlayStyles} onClick={onClose}>
       <div style={contentContainerStyles} onClick={(e) => e.stopPropagation()}>
-        <div style={orderBannerStyles}>
-          <button style={buttonCloseDialogStyles} onClick={onClose}>
-            <XIconRegular style={iconButtonStyles} />
-          </button>
-          <Image
-            src="https://preodemo.gumlet.io/usr/venue/7602/menuItem/646fbdc8cecca.png"
-            alt="order image"
-            width={480}
-            height={320}
-          />
-        </div>
+        {image && (
+          <div style={orderBannerStyles}>
+            <button style={buttonCloseDialogStyles} onClick={onClose}>
+              <XIconRegular style={iconButtonStyles} />
+            </button>
+            <Image
+              src={image as string}
+              alt="order image"
+              width={480}
+              height={320}
+            />
+          </div>
+        )}
 
         <main style={mainContainerStyles}>
           <div style={headingContainerStyles}>
-            <h2 style={orderTitleStyles}>Smash Brooks</h2>
-            <p style={orderDescriptionStyles}>
-              100g pressed hamburger, mozzarella cheese, pickles, red onion,
-              grilled bacon and traditional Heinz mayonnaise.
-            </p>
+            <h2 style={orderTitleStyles}>{name}</h2>
+            <p style={orderDescriptionStyles}>{description}</p>
           </div>
 
           <div style={labelContainerStyles}>
@@ -240,7 +254,13 @@ export const Dialog = ({ onClose }: DialogProps) => {
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
-              <input type="radio" />
+              <input
+                type="radio"
+                name="itemSize"
+                value="1"
+                checked={size === 1}
+                onChange={handleOptionChange}
+              />
             </div>
 
             <div style={inputContainerStyles}>
@@ -249,7 +269,13 @@ export const Dialog = ({ onClose }: DialogProps) => {
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
-              <input type="radio" />
+              <input
+                type="radio"
+                name="itemSize"
+                value="2"
+                checked={size === 2}
+                onChange={handleOptionChange}
+              />
             </div>
 
             <div style={inputContainerStyles}>
@@ -258,7 +284,13 @@ export const Dialog = ({ onClose }: DialogProps) => {
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
-              <input type="radio" />
+              <input
+                type="radio"
+                name="itemSize"
+                value="3"
+                checked={size === 3}
+                onChange={handleOptionChange}
+              />
             </div>
 
             <div style={inputContainerStyles}>
@@ -267,7 +299,13 @@ export const Dialog = ({ onClose }: DialogProps) => {
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
-              <input type="radio" />
+              <input
+                type="radio"
+                name="itemSize"
+                value="4"
+                checked={size === 4}
+                onChange={handleOptionChange}
+              />
             </div>
 
             <div style={inputContainerStyles}>
@@ -276,17 +314,31 @@ export const Dialog = ({ onClose }: DialogProps) => {
                 <span style={inputPriceStyles}>R$ 33,00</span>
               </div>
 
-              <input type="radio" />
+              <input
+                type="radio"
+                name="itemSize"
+                value="5"
+                checked={size === 5}
+                onChange={handleOptionChange}
+              />
             </div>
           </form>
 
           <footer style={footerContainerStyles}>
             <div style={controlsContainerStyles}>
-              <button style={buttonSecondaryStyles}>
+              <button
+                style={buttonSecondaryStyles}
+                onClick={() => handleDecreaseSize()}
+                disabled={size <= 1}
+              >
                 <MinusIconRegular style={iconButtonSecondaryStyles} />
               </button>
-              <span style={countStyles}>1</span>
-              <button style={buttonPrimaryStyles}>
+              <span style={countStyles}>{size}</span>
+              <button
+                style={buttonPrimaryStyles}
+                onClick={() => handleIncreaseSize()}
+                disabled={size >= 5}
+              >
                 <PlusIconRegular style={iconButtonPrimaryStyles} />
               </button>
             </div>

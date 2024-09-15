@@ -7,9 +7,11 @@ import Link from 'next/link'
 import { ChevronTopIconRegular } from './icons'
 import { useMenu } from '@/hooks/use-menu'
 import { Dialog } from './dialog'
+import { MenuItem as IMenuItem } from '@/@types/api-type'
 
 export const MenuRestaurant = () => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<IMenuItem | null>(null)
 
   const { theme } = useTheme()
   const { menu } = useMenu()
@@ -22,12 +24,14 @@ export const MenuRestaurant = () => {
     boxShadow: '0px 2px 14px 0px rgba(0, 0, 0, 0.15)',
   }
 
-  const onOpenDialog = () => {
-    setIsOpenDialog(true)
+  const handleCloseDialog = () => {
+    setSelectedItem(null)
+    setIsOpenDialog(false)
   }
 
-  const onCloseDialog = () => {
-    setIsOpenDialog(false)
+  const handleSelectItem = (item: IMenuItem) => {
+    setSelectedItem(item)
+    setIsOpenDialog(true)
   }
 
   return (
@@ -54,13 +58,20 @@ export const MenuRestaurant = () => {
               name={item.name}
               description={item.description}
               image={item.images && item.images[0] ? item.images[0].image : ''}
-              onOpen={onOpenDialog}
+              onOpen={() => handleSelectItem(item)}
             />
           ))}
         </MenuSection>
       ))}
 
-      {isOpenDialog && <Dialog onClose={onCloseDialog} />}
+      {isOpenDialog && (
+        <Dialog
+          name={selectedItem?.name}
+          description={selectedItem?.description}
+          image={selectedItem?.images?.[0]?.image ?? ''}
+          onClose={handleCloseDialog}
+        />
+      )}
     </div>
   )
 }
@@ -228,7 +239,7 @@ export const MenuItem = ({
     alignItems: 'start',
     justifyContent: 'space-between',
     padding: '1rem 0',
-    cursor: 'pointer'
+    cursor: 'pointer',
   }
 
   const itemInfoStyles: CSSProperties = {
