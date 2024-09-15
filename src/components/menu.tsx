@@ -259,7 +259,7 @@ export const MenuItem = ({
     <li style={itemStyles}>
       <div style={itemInfoStyles}>
         <span style={itemInfoLabelStyles}>{name}</span>
-        <p style={itemInfoDetailStyles}>{description}</p>
+        {description && <p style={itemInfoDetailStyles}>{description}</p>}
         <span style={itemInfoPriceStyles}>{price}</span>
       </div>
       <div style={itemImageContainerStyles}>
