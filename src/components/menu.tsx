@@ -1,7 +1,7 @@
 'use client'
 
 import { useTheme } from '@/hooks/use-theme'
-import { CSSProperties, PropsWithChildren, ReactNode } from 'react'
+import { CSSProperties, PropsWithChildren, ReactNode, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronTopIconRegular } from './icons'
@@ -138,6 +138,9 @@ interface MenuSectionProps {
 
 export const MenuSection = ({ title, children }: MenuSectionProps) => {
   const { theme } = useTheme()
+  const [isOpen, setIsOpen] = useState(true)
+
+  const toggleSection = () => setIsOpen(!isOpen)
 
   const headingSectionStyles: CSSProperties = {
     display: 'flex',
@@ -161,6 +164,8 @@ export const MenuSection = ({ title, children }: MenuSectionProps) => {
 
     background: 'none',
     border: '0',
+    transform: isOpen ? 'rotate(0deg)' : 'rotate(180deg)',
+    transition: 'transform 0.3s ease',
   }
 
   const headingSectionIconStyles: CSSProperties = {
@@ -173,11 +178,11 @@ export const MenuSection = ({ title, children }: MenuSectionProps) => {
     <section id={title}>
       <div style={headingSectionStyles}>
         <h2 style={headingSectionLabelStyles}>{title}</h2>
-        <button style={headingSectionButtonStyles}>
+        <button style={headingSectionButtonStyles} onClick={toggleSection}>
           <ChevronTopIconRegular style={headingSectionIconStyles} />
         </button>
       </div>
-      <ul>{children}</ul>
+      {isOpen && <ul>{children}</ul>}
     </section>
   )
 }
