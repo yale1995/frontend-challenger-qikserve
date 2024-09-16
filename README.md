@@ -14,6 +14,7 @@ This is a white label restaurant menu application built as a test project for a 
 ## Technologies Used
 
 - **React**: A JavaScript library for building user interfaces.
+- **Redux/Toolkit**: Global state manager.
 - **Next.js**: A React framework for server-rendered applications and static site generation.
 - **next-intl**: A package for internationalization in Next.js applications.
 - **TypeScript**: A superset of JavaScript that adds static types.
