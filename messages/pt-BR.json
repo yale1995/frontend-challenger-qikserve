@@ -10,5 +10,9 @@
   "dialog": {
     "labelDescription": "Selecione 1 opção",
     "addToCartButton": "Adicionar ao Pedido"
+  },
+  "cart": {
+    "title": "Carrinho",
+    "emptyCart": "Seu carrinho está vazio"
   }
 }

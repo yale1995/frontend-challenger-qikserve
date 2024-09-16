@@ -10,5 +10,9 @@
   "dialog": {
     "labelDescription": "Select 1 option",
     "addToCartButton": "Add to Order"
+  },
+  "cart": {
+    "title": "Cart",
+    "emptyCart": "Your cart is empty"
   }
 }
