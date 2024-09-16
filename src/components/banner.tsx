@@ -1,11 +1,11 @@
-import { WebSettings } from '@/@types/api-type'
+'use client'
+
+import { useTheme } from '@/hooks/use-theme'
 import { CSSProperties } from 'react'
 
-interface BannerProps {
-  theme: WebSettings
-}
+export const Banner = () => {
+  const { theme } = useTheme()
 
-export const Banner = ({ theme }: BannerProps) => {
   const bannerStyle: CSSProperties = {
     height: '9.375rem',
     backgroundImage: theme.bannerImage ? `url(${theme.bannerImage})` : 'none',

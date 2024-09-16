@@ -1,28 +1,26 @@
-import { Venue } from '@/@types/api-type'
 import { Banner } from '@/components/banner'
+import { Cart } from '@/components/cart'
+import { MainContainer } from '@/components/main-container'
+import { MenuRestaurant } from '@/components/menu'
 import { Navbar } from '@/components/navbar'
+import { ReduxProvider } from '@/components/redux-provider'
 import { SearchInput } from '@/components/search-input'
 import { Wrapper } from '@/components/wrapper'
 
 export default async function Menu() {
-  const response = await fetch(
-    'https://cdn-dev.preoday.com/challenge/venue/9',
-    {
-      method: 'GET',
-    },
-  )
-
-  const data = (await response.json()) as Venue
-
-  console.log(data)
-
   return (
     <>
-      <Navbar theme={data.webSettings} />
-      <Banner theme={data.webSettings} />
+      <Navbar />
+      <Banner />
 
       <Wrapper>
-        <SearchInput theme={data.webSettings} />
+        <SearchInput />
+        <MainContainer>
+          <ReduxProvider>
+            <MenuRestaurant />
+            <Cart />
+          </ReduxProvider>
+        </MainContainer>
       </Wrapper>
     </>
   )

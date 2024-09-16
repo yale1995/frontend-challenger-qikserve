@@ -1,0 +1,18 @@
+{
+  "navbar": {
+    "menu": "Cardápio",
+    "sign-in": "Entrar",
+    "contact": "Contato"
+  },
+  "searchInput": {
+    "placeholder": "Pesquise itens do menu"
+  },
+  "dialog": {
+    "labelDescription": "Selecione 1 opção",
+    "addToCartButton": "Adicionar ao Pedido"
+  },
+  "cart": {
+    "title": "Carrinho",
+    "emptyCart": "Seu carrinho está vazio"
+  }
+}

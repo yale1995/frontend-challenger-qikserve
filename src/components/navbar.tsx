@@ -1,15 +1,14 @@
 'use client'
 
-import { WebSettings } from '@/@types/api-type'
+import { useTheme } from '@/hooks/use-theme'
+import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { CSSProperties } from 'react'
 
-interface NavbarProps {
-  theme: WebSettings
-}
-
-export const Navbar = ({ theme }: NavbarProps) => {
+export const Navbar = () => {
   const pathname = usePathname()
+  const { theme } = useTheme()
+  const t = useTranslations()
 
   const navStyle: CSSProperties = {
     height: '3.25rem',
@@ -27,13 +26,11 @@ export const Navbar = ({ theme }: NavbarProps) => {
   const itemStyle = (path: string): CSSProperties => ({
     width: '14.5rem',
     lineHeight: '52px',
-    color: theme.backgroundColour,
+    color: 'var(--white)',
     textDecoration: 'none',
     fontSize: '1.25rem',
     borderBottom:
-      pathname === path
-        ? `5px solid ${theme.backgroundColour}`
-        : '5px solid transparent',
+      pathname === path ? `5px solid var(--white)` : '5px solid transparent',
     textAlign: 'center',
   })
 
@@ -41,13 +38,13 @@ export const Navbar = ({ theme }: NavbarProps) => {
     <nav style={navStyle}>
       <div style={listItemsStyle}>
         <a href="/" style={itemStyle('/menu')}>
-          Menu
+          {t('navbar.menu')}
         </a>
         <a href="/sign-in" style={itemStyle('/sign-in')}>
-          Entrar
+          {t('navbar.sign-in')}
         </a>
         <a href="/contact" style={itemStyle('/contact')}>
-          Contato
+          {t('navbar.contact')}
         </a>
       </div>
     </nav>
