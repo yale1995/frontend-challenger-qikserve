@@ -8,17 +8,15 @@ import { ChevronTopIconRegular } from './icons'
 import { useMenu } from '@/hooks/use-menu'
 import { Dialog } from './dialog'
 import { MenuItem as IMenuItem } from '@/@types/api-type'
-
-type SelectedItem = IMenuItem & {
-  sectionName: string
-}
+import { useFormatter } from 'next-intl'
 
 export const MenuRestaurant = () => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null)
+  const [selectedItem, setSelectedItem] = useState<IMenuItem | null>(null)
 
   const { theme } = useTheme()
   const { menu } = useMenu()
+  const format = useFormatter()
 
   const [activeTab, setActiveTab] = useState(menu.sections[0]?.name || '')
 
@@ -33,7 +31,7 @@ export const MenuRestaurant = () => {
     setIsOpenDialog(false)
   }
 
-  const handleSelectItem = (item: SelectedItem | null) => {
+  const handleSelectItem = (item: IMenuItem | null) => {
     setSelectedItem(item)
     setIsOpenDialog(true)
   }
@@ -58,26 +56,21 @@ export const MenuRestaurant = () => {
           {section.items.map((item) => (
             <MenuItem
               key={item.id}
-              price={`R$${item.price.toFixed(2)}`}
+              price={format.number(item?.price, {
+                style: 'currency',
+                currency: 'BRL',
+              })}
               name={item.name}
               description={item.description}
               image={item.images && item.images[0] ? item.images[0].image : ''}
-              onOpen={() =>
-                handleSelectItem({ ...item, sectionName: section.name })
-              }
+              onOpen={() => handleSelectItem(item)}
             />
           ))}
         </MenuSection>
       ))}
 
       {isOpenDialog && (
-        <Dialog
-          name={selectedItem?.name}
-          description={selectedItem?.description}
-          image={selectedItem?.images?.[0]?.image ?? ''}
-          section={selectedItem?.sectionName}
-          onClose={handleCloseDialog}
-        />
+        <Dialog item={selectedItem} onClose={handleCloseDialog} />
       )}
     </div>
   )

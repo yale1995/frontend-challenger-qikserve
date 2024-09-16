@@ -8,10 +8,7 @@
     "placeholder": "Search menu items"
   },
   "dialog": {
-    "labelTitle": "Choose your size",
     "labelDescription": "Select 1 option",
-    "burgers": "meat",
-    "desserts": "unit",
-    "drinks": "unit"
+    "addToCartButton": "Add to Order"
   }
 }

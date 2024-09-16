@@ -2,26 +2,21 @@ import { useTheme } from '@/hooks/use-theme'
 import Image from 'next/image'
 import { ChangeEvent, CSSProperties, useState } from 'react'
 import { MinusIconRegular, PlusIconRegular, XIconRegular } from './icons'
-import { useTranslations } from 'next-intl'
+import { useFormatter, useTranslations } from 'next-intl'
+import { MenuItem } from '@/@types/api-type'
 
 interface DialogProps {
   onClose: () => void
-  name?: string
-  description?: string
-  image?: string
-  section?: string
+  item: MenuItem | null
 }
 
-export const Dialog = ({
-  onClose,
-  description,
-  name,
-  image,
-  section,
-}: DialogProps) => {
-  const [size, setSize] = useState(1)
+export const Dialog = ({ onClose, item }: DialogProps) => {
+  const [price, setPrice] = useState(item?.price)
+  const [quantity, setQuantity] = useState(1)
+
   const { theme } = useTheme()
   const t = useTranslations()
+  const format = useFormatter()
 
   const dialogOverlayStyles: CSSProperties = {
     position: 'fixed',
@@ -217,27 +212,27 @@ export const Dialog = ({
   }
 
   const handleOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSize(Number(event.target.value))
+    setPrice(Number(event.target.value))
   }
 
-  const handleIncreaseSize = () => {
-    setSize((prev) => prev + 1)
+  const handleIncreaseQuantity = () => {
+    setQuantity((prev) => prev + 1)
   }
 
-  const handleDecreaseSize = () => {
-    setSize((prev) => prev - 1)
+  const handleDecreaseQuantity = () => {
+    setQuantity((prev) => prev - 1)
   }
 
   return (
     <div style={dialogOverlayStyles} onClick={onClose}>
       <div style={contentContainerStyles} onClick={(e) => e.stopPropagation()}>
-        {image && (
+        {item?.images && (
           <div style={orderBannerStyles}>
             <button style={buttonCloseDialogStyles} onClick={onClose}>
               <XIconRegular style={iconButtonStyles} />
             </button>
             <Image
-              src={image as string}
+              src={item?.images[0].image as string}
               alt="order image"
               width={480}
               height={320}
@@ -247,125 +242,72 @@ export const Dialog = ({
 
         <main style={mainContainerStyles}>
           <div style={headingContainerStyles}>
-            <h2 style={orderTitleStyles}>{name}</h2>
-            <p style={orderDescriptionStyles}>{description}</p>
+            <h2 style={orderTitleStyles}>{item?.name}</h2>
+            <p style={orderDescriptionStyles}>{item?.description}</p>
           </div>
 
-          <div style={labelContainerStyles}>
-            <h3 style={labelTitleStyles}>{t('dialog.labelTitle')}</h3>
-            <span style={labelDescriptionStyles}>
-              {t('dialog.labelDescription')}
-            </span>
-          </div>
-
-          <form>
-            <div style={inputContainerStyles}>
-              <div>
-                <label style={inputLabelStyles}>
-                  1 {t(`dialog.${section?.toLowerCase()}`)}
-                </label>
-                <span style={inputPriceStyles}>R$ 33,00</span>
+          {item?.modifiers?.map((modifier) => (
+            <>
+              <div style={labelContainerStyles} key={modifier.id}>
+                <h3 style={labelTitleStyles}>{modifier?.name}</h3>
+                <span style={labelDescriptionStyles}>
+                  {t('dialog.labelDescription')}
+                </span>
               </div>
 
-              <input
-                type="radio"
-                name="itemSize"
-                value="1"
-                checked={size === 1}
-                onChange={handleOptionChange}
-              />
-            </div>
+              <form>
+                {modifier.items.map((item) => (
+                  <div style={inputContainerStyles} key={item.id}>
+                    <div>
+                      <label htmlFor={item.name} style={inputLabelStyles}>
+                        {item.name}
+                      </label>
+                      <span style={inputPriceStyles}>
+                        {format.number(item?.price, {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })}
+                      </span>
+                    </div>
 
-            <div style={inputContainerStyles}>
-              <div>
-                <label style={inputLabelStyles}>
-                  2 {t(`dialog.${section?.toLowerCase()}`)}s
-                </label>
-                <span style={inputPriceStyles}>R$ 33,00</span>
-              </div>
-
-              <input
-                type="radio"
-                name="itemSize"
-                value="2"
-                checked={size === 2}
-                onChange={handleOptionChange}
-              />
-            </div>
-
-            <div style={inputContainerStyles}>
-              <div>
-                <label style={inputLabelStyles}>
-                  3 {t(`dialog.${section?.toLowerCase()}`)}s
-                </label>
-                <span style={inputPriceStyles}>R$ 33,00</span>
-              </div>
-
-              <input
-                type="radio"
-                name="itemSize"
-                value="3"
-                checked={size === 3}
-                onChange={handleOptionChange}
-              />
-            </div>
-
-            <div style={inputContainerStyles}>
-              <div>
-                <label style={inputLabelStyles}>
-                  4 {t(`dialog.${section?.toLowerCase()}`)}s
-                </label>
-                <span style={inputPriceStyles}>R$ 33,00</span>
-              </div>
-
-              <input
-                type="radio"
-                name="itemSize"
-                value="4"
-                checked={size === 4}
-                onChange={handleOptionChange}
-              />
-            </div>
-
-            <div style={inputContainerStyles}>
-              <div>
-                <label style={inputLabelStyles}>
-                  5 {t(`dialog.${section?.toLowerCase()}`)}s
-                </label>
-                <span style={inputPriceStyles}>R$ 33,00</span>
-              </div>
-
-              <input
-                type="radio"
-                name="itemSize"
-                value="5"
-                checked={size === 5}
-                onChange={handleOptionChange}
-              />
-            </div>
-          </form>
+                    <input
+                      type="radio"
+                      id={item.name}
+                      name={item.name}
+                      value={item.price}
+                      checked={price === item.price}
+                      onChange={handleOptionChange}
+                    />
+                  </div>
+                ))}
+              </form>
+            </>
+          ))}
 
           <footer style={footerContainerStyles}>
             <div style={controlsContainerStyles}>
               <button
                 style={buttonSecondaryStyles}
-                onClick={() => handleDecreaseSize()}
-                disabled={size <= 1}
+                onClick={() => handleDecreaseQuantity()}
+                disabled={quantity <= 1}
               >
                 <MinusIconRegular style={iconButtonSecondaryStyles} />
               </button>
-              <span style={countStyles}>{size}</span>
+              <span style={countStyles}>{quantity}</span>
               <button
                 style={buttonPrimaryStyles}
-                onClick={() => handleIncreaseSize()}
-                disabled={size >= 5}
+                onClick={() => handleIncreaseQuantity()}
               >
                 <PlusIconRegular style={iconButtonPrimaryStyles} />
               </button>
             </div>
 
             <button style={addToCartButtonStyles}>
-              Add to Order • R$ 11.85
+              {t('dialog.addToCartButton')} •{' '}
+              {format.number(Number(price) * quantity, {
+                style: 'currency',
+                currency: 'BRL',
+              })}
             </button>
           </footer>
         </main>

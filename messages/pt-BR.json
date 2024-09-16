@@ -8,10 +8,7 @@
     "placeholder": "Pesquise itens do menu"
   },
   "dialog": {
-    "labelTitle": "Escolha seu tamanho",
     "labelDescription": "Selecione 1 opção",
-    "burgers": "carne",
-    "desserts": "unidade",
-    "drinks": "unidade"
+    "addToCartButton": "Adicionar ao Pedido"
   }
 }
