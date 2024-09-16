@@ -7,6 +7,7 @@ import { ReactNode } from 'react'
 import { MenuProvider } from '@/contexts/menu-context'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
+import { SettingsProvider } from '@/contexts/settings-contexts'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -42,17 +43,20 @@ export default async function RootLayout({
   ])
 
   const locale = await getLocale()
-
   const messages = await getMessages()
+
+  const { webSettings, ...settings } = venueData
 
   return (
     <html lang={locale}>
       <body className={roboto.className}>
-        <ThemeProvider themeData={venueData.webSettings}>
+        <ThemeProvider themeData={webSettings}>
           <MenuProvider menuData={menuData}>
-            <NextIntlClientProvider messages={messages}>
-              {children}
-            </NextIntlClientProvider>
+            <SettingsProvider settingsData={settings}>
+              <NextIntlClientProvider messages={messages}>
+                {children}
+              </NextIntlClientProvider>
+            </SettingsProvider>
           </MenuProvider>
         </ThemeProvider>
       </body>

@@ -4,6 +4,7 @@ import { ChangeEvent, CSSProperties, useState } from 'react'
 import { MinusIconRegular, PlusIconRegular, XIconRegular } from './icons'
 import { useFormatter, useTranslations } from 'next-intl'
 import { MenuItem } from '@/@types/api-type'
+import { useSettings } from '@/hooks/use-settings'
 
 interface DialogProps {
   onClose: () => void
@@ -15,6 +16,7 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
   const [quantity, setQuantity] = useState(1)
 
   const { theme } = useTheme()
+  const { settings } = useSettings()
   const t = useTranslations()
   const format = useFormatter()
 
@@ -265,7 +267,7 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
                       <span style={inputPriceStyles}>
                         {format.number(item?.price, {
                           style: 'currency',
-                          currency: 'BRL',
+                          currency: settings.ccy,
                         })}
                       </span>
                     </div>
@@ -306,7 +308,7 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
               {t('dialog.addToCartButton')} •{' '}
               {format.number(Number(price) * quantity, {
                 style: 'currency',
-                currency: 'BRL',
+                currency: settings.ccy,
               })}
             </button>
           </footer>

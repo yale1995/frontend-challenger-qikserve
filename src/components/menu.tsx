@@ -9,6 +9,7 @@ import { useMenu } from '@/hooks/use-menu'
 import { Dialog } from './dialog'
 import { MenuItem as IMenuItem } from '@/@types/api-type'
 import { useFormatter } from 'next-intl'
+import { useSettings } from '@/hooks/use-settings'
 
 export const MenuRestaurant = () => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
@@ -16,6 +17,7 @@ export const MenuRestaurant = () => {
 
   const { theme } = useTheme()
   const { menu } = useMenu()
+  const { settings } = useSettings()
   const format = useFormatter()
 
   const [activeTab, setActiveTab] = useState(menu.sections[0]?.name || '')
@@ -58,7 +60,7 @@ export const MenuRestaurant = () => {
               key={item.id}
               price={format.number(item?.price, {
                 style: 'currency',
-                currency: 'BRL',
+                currency: settings.ccy,
               })}
               name={item.name}
               description={item.description}

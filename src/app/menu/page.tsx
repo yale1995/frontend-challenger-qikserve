@@ -13,7 +13,6 @@ export default async function Menu() {
 
       <Wrapper>
         <SearchInput />
-
         <MainContainer>
           <MenuRestaurant />
           <div>ola</div>
