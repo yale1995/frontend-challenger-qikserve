@@ -4,10 +4,15 @@ import { useCart } from '@/hooks/use-cart'
 import { useTheme } from '@/hooks/use-theme'
 import { CSSProperties } from 'react'
 import { MinusIconRegular, PlusIconRegular } from './icons'
+import { useFormatter, useTranslations } from 'next-intl'
+import { useSettings } from '@/hooks/use-settings'
 
 export const Cart = () => {
-  const { cartItems } = useCart()
+  const { cartItems, cartTotal } = useCart()
   const { theme } = useTheme()
+  const format = useFormatter()
+  const { settings } = useSettings()
+  const t = useTranslations()
 
   const cartContainerStyles: CSSProperties = {
     width: '100%',
@@ -98,6 +103,7 @@ export const Cart = () => {
     alignItems: 'center',
     padding: '1rem',
     borderTop: '1px solid var(--gray-200)',
+    background: theme.backgroundColour,
   }
 
   const subtotalHeadingStyles: CSSProperties = {
@@ -127,39 +133,69 @@ export const Cart = () => {
   return (
     <div style={cartContainerStyles}>
       <header style={headerStyles}>
-        <h2 style={headingStyles}>Carrinho</h2>
+        <h2 style={headingStyles}>{t('cart.title')}</h2>
       </header>
 
-      <ul style={listContainerStyles}>
-        <li style={listItemStyles}>
-          <div style={itemHeadingStyles}>
-            <p style={itemTitleStyles}>Smash Brooks</p>
-            <strong style={itemPriceStyles}>R$35,00</strong>
-          </div>
+      {cartItems.length > 0 ? (
+        <ul style={listContainerStyles}>
+          {cartItems.map((item) => (
+            <li style={listItemStyles} key={item.productId}>
+              <div style={itemHeadingStyles}>
+                <p style={itemTitleStyles}>{item.productName}</p>
+                <strong style={itemPriceStyles}>
+                  {format?.number(item?.productPrice, {
+                    style: 'currency',
+                    currency: settings.ccy,
+                  })}
+                </strong>
+              </div>
 
-          <span style={itemModifierStyles}>Com 2 carnes</span>
+              {item.modifierName && (
+                <span style={itemModifierStyles}>Com {item.modifierName}</span>
+              )}
 
-          <div style={buttonControlsContainerStyles}>
-            <button style={buttonStyles}>
-              <MinusIconRegular style={buttonIconStyles} />
-            </button>
-            1
-            <button style={buttonStyles}>
-              <PlusIconRegular style={buttonIconStyles} />
-            </button>
-          </div>
-        </li>
-      </ul>
+              <div style={buttonControlsContainerStyles}>
+                <button style={buttonStyles}>
+                  <MinusIconRegular style={buttonIconStyles} />
+                </button>
+                1
+                <button style={buttonStyles}>
+                  <PlusIconRegular style={buttonIconStyles} />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div style={totalContainerStyles}>
+          <span style={subtotalHeadingStyles}>{t('cart.emptyCart')}</span>
+        </div>
+      )}
 
-      <div style={totalContainerStyles}>
-        <span style={subtotalHeadingStyles}>Subtotal</span>
-        <span style={subtotalAmountStyles}>R$ 22,50</span>
-      </div>
+      {cartItems.length > 0 && (
+        <div style={totalContainerStyles}>
+          <span style={subtotalHeadingStyles}>Subtotal</span>
+          <span style={subtotalAmountStyles}>
+            {' '}
+            {format?.number(cartTotal, {
+              style: 'currency',
+              currency: settings.ccy,
+            })}
+          </span>
+        </div>
+      )}
 
-      <footer style={totalContainerStyles}>
-        <span style={totalHeadingStyles}>Total:</span>
-        <strong style={totalAmountStyles}>R$48,00</strong>
-      </footer>
+      {cartItems.length > 0 && (
+        <footer style={totalContainerStyles}>
+          <span style={totalHeadingStyles}>Total:</span>
+          <strong style={totalAmountStyles}>
+            {format?.number(cartTotal, {
+              style: 'currency',
+              currency: settings.ccy,
+            })}
+          </strong>
+        </footer>
+      )}
     </div>
   )
 }
