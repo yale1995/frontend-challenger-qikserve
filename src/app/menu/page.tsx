@@ -4,6 +4,8 @@ import { MenuRestaurant } from '@/components/menu'
 import { Navbar } from '@/components/navbar'
 import { SearchInput } from '@/components/search-input'
 import { Wrapper } from '@/components/wrapper'
+import { Provider } from 'react-redux'
+import { store } from '@/stores/store'
 
 export default async function Menu() {
   return (
@@ -14,8 +16,10 @@ export default async function Menu() {
       <Wrapper>
         <SearchInput />
         <MainContainer>
-          <MenuRestaurant />
-          <div>ola</div>
+          <Provider store={store}>
+            <MenuRestaurant />
+            <div>ola</div>
+          </Provider>
         </MainContainer>
       </Wrapper>
     </>
