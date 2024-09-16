@@ -39,5 +39,45 @@ npm install -g pnpm
 ### Cloning the repository
 
 ```bash
-git clone
+git clone https://github.com/yale1995/frontend-challenger-qikserve
 ```
+
+### Starting app
+
+```bash
+pnpm install
+
+pnpm dev
+```
+
+### Building for production
+
+```bash
+pnpm build
+```
+
+### Linting
+
+```bash
+pnpm lint
+```
+
+# Customization
+
+The app is designed with white-label capabilities, allowing easy customization for different restaurants. You can modify:
+
+- Branding: Change the logo, colors, and fonts to match the restaurant’s identity.
+- Menu Data: Easily update the menu items via a JSON or API integration.
+- Languages: Extend or modify the language files for multi-language support.
+
+
+# Future Improvements
+
+- Integration with a CMS for dynamic menu management
+- Additional themes for broader customization options
+- Add animations and micro-interactions for enhanced user experience
+
+# License
+
+This project is licensed under the MIT License.
+
