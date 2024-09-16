@@ -35,7 +35,9 @@ const cartSlice = createSlice({
       } else {
         state.items.push({ ...newItem, productQuantity: 1 })
       }
-      state.total += newItem.modifierPrice ?? newItem.productPrice
+      state.total +=
+        (newItem.modifierPrice ?? newItem.productPrice) *
+        newItem.productQuantity
     },
   },
 })
