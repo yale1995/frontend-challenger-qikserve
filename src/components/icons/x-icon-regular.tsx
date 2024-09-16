@@ -1,13 +1,14 @@
 import { IconProps } from '.'
 
-export const XIconRegular = ({ className }: IconProps) => {
+export const XIconRegular = (props: IconProps) => {
   return (
     <svg
+      {...props}
       width="12"
       height="12"
       viewBox="0 0 12 12"
       xmlns="http://www.w3.org/2000/svg"
-      className={className}
+      fill="currentColor"
     >
       <path
         fill-rule="evenodd"
