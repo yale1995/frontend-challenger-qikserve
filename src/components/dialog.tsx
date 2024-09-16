@@ -3,8 +3,9 @@ import Image from 'next/image'
 import { ChangeEvent, CSSProperties, useState } from 'react'
 import { MinusIconRegular, PlusIconRegular, XIconRegular } from './icons'
 import { useFormatter, useTranslations } from 'next-intl'
-import { MenuItem } from '@/@types/api-type'
+import { MenuItem, ModifierItem } from '@/@types/api-type'
 import { useSettings } from '@/hooks/use-settings'
+import { useCart } from '@/hooks/use-cart'
 
 interface DialogProps {
   onClose: () => void
@@ -12,8 +13,9 @@ interface DialogProps {
 }
 
 export const Dialog = ({ onClose, item }: DialogProps) => {
-  const [price, setPrice] = useState(item?.price)
+  const [modifierItem, setModifierItem] = useState<ModifierItem | null>(null)
   const [quantity, setQuantity] = useState(1)
+  const { addToCart } = useCart()
 
   const { theme } = useTheme()
   const { settings } = useSettings()
@@ -214,7 +216,7 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
   }
 
   const handleOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPrice(Number(event.target.value))
+    setModifierItem(JSON.parse(event.target.value))
   }
 
   const handleIncreaseQuantity = () => {
@@ -223,6 +225,20 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
 
   const handleDecreaseQuantity = () => {
     setQuantity((prev) => prev - 1)
+  }
+
+  const handleAddToCart = () => {
+    addToCart({
+      productId: item?.id as number,
+      productName: item?.name as string,
+      productPrice: item?.price as number,
+      productQuantity: quantity,
+      modifierId: modifierItem?.id ?? null,
+      modifierName: modifierItem?.name ?? null,
+      modifierPrice: modifierItem?.price ?? null,
+    })
+
+    onClose()
   }
 
   return (
@@ -273,11 +289,11 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
                     </div>
 
                     <input
-                      type="radio"
                       id={item.name}
-                      name={item.name}
-                      value={item.price}
-                      checked={price === item.price}
+                      type="radio"
+                      name="modifier"
+                      value={JSON.stringify(item)}
+                      checked={item.id === modifierItem?.id}
                       onChange={handleOptionChange}
                     />
                   </div>
@@ -304,12 +320,16 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
               </button>
             </div>
 
-            <button style={addToCartButtonStyles}>
+            <button style={addToCartButtonStyles} onClick={handleAddToCart}>
               {t('dialog.addToCartButton')} •{' '}
-              {format.number(Number(price) * quantity, {
-                style: 'currency',
-                currency: settings.ccy,
-              })}
+              {format.number(
+                Number(modifierItem ? modifierItem?.price : item?.price) *
+                  quantity,
+                {
+                  style: 'currency',
+                  currency: settings.ccy,
+                },
+              )}
             </button>
           </footer>
         </main>

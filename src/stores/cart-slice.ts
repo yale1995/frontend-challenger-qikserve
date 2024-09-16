@@ -1,10 +1,15 @@
+'use client'
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface CartItem {
-  id: string
-  name: string
-  price: number
-  quantity: number
+  productId: number
+  productName: string
+  productPrice: number
+  productQuantity: number
+  modifierId: number | null
+  modifierName: string | null
+  modifierPrice: number | null
 }
 
 interface CartState {
@@ -21,14 +26,16 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action: PayloadAction<CartItem>) => {
       const newItem = action.payload
-      const existingItem = state.items.find((item) => item.id === newItem.id)
+      const existingItem = state.items.find(
+        (item) => item.productId === newItem.productId,
+      )
 
       if (existingItem) {
-        existingItem.quantity++
+        existingItem.productQuantity++
       } else {
-        state.items.push({ ...newItem, quantity: 1 })
+        state.items.push({ ...newItem, productQuantity: 1 })
       }
-      state.total += newItem.price
+      state.total += newItem.modifierPrice ?? newItem.productPrice
     },
   },
 })

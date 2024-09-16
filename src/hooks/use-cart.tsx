@@ -1,4 +1,4 @@
-// /folder/useCart.ts
+'use client'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '@/stores/store'
