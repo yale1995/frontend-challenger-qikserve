@@ -320,7 +320,11 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
               </button>
             </div>
 
-            <button style={addToCartButtonStyles} onClick={handleAddToCart}>
+            <button
+              style={addToCartButtonStyles}
+              onClick={handleAddToCart}
+              disabled={(item?.price as number) <= 0 && !modifierItem}
+            >
               {t('dialog.addToCartButton')} •{' '}
               {format.number(
                 Number(modifierItem ? modifierItem?.price : item?.price) *
