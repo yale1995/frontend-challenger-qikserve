@@ -2,6 +2,8 @@
 
 This is a white label restaurant menu application built as a test project for a frontend developer position. The application is designed to be easily customizable for different restaurants while maintaining a flexible and scalable architecture.
 
+![Captura de Tela 2024-09-16 às 17 12 00](https://github.com/user-attachments/assets/9b4cecaf-6dde-472e-bd95-2692e2568b2c)
+
 ## Features
 
 - Multi-language support using `next-intl`
