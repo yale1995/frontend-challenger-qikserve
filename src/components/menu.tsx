@@ -10,10 +10,13 @@ import { Dialog } from './dialog'
 import { MenuItem as IMenuItem } from '@/@types/api-type'
 import { useFormatter } from 'next-intl'
 import { useSettings } from '@/hooks/use-settings'
+import { useMediaQuery } from '@/hooks/use-media-query'
 
 export const MenuRestaurant = () => {
   const [isOpenDialog, setIsOpenDialog] = useState(false)
   const [selectedItem, setSelectedItem] = useState<IMenuItem | null>(null)
+
+  const isMobile = useMediaQuery('(max-width: 766px)')
 
   const { theme } = useTheme()
   const { menu } = useMenu()
@@ -28,6 +31,10 @@ export const MenuRestaurant = () => {
     boxShadow: '0px 2px 14px 0px rgba(0, 0, 0, 0.15)',
   }
 
+  const containerMobileStyles: CSSProperties = {
+    background: theme.backgroundColour,
+  }
+
   const handleCloseDialog = () => {
     setSelectedItem(null)
     setIsOpenDialog(false)
@@ -39,7 +46,7 @@ export const MenuRestaurant = () => {
   }
 
   return (
-    <div style={containerStyles}>
+    <div style={isMobile ? containerMobileStyles : containerStyles}>
       <MenuTabs>
         {menu.sections.map((section) => (
           <TabItem
@@ -79,6 +86,7 @@ export const MenuRestaurant = () => {
 }
 
 export const MenuTabs = ({ children }: PropsWithChildren) => {
+  const isMobile = useMediaQuery('(max-width: 766px)')
   const tabsStyles: CSSProperties = {
     padding: '1.25rem 1rem 1.5rem',
     display: 'flex',
@@ -86,7 +94,16 @@ export const MenuTabs = ({ children }: PropsWithChildren) => {
     gap: '0.1875rem',
   }
 
-  return <section style={tabsStyles}>{children}</section>
+  const tabsMobileStyles: CSSProperties = {
+    ...tabsStyles,
+    padding: '1.25rem 0 1.5rem',
+  }
+
+  return (
+    <section style={isMobile ? tabsMobileStyles : tabsStyles}>
+      {children}
+    </section>
+  )
 }
 
 interface TabItemProps {
@@ -236,6 +253,8 @@ export const MenuItem = ({
   image,
   onOpen,
 }: MenuItemProps) => {
+  const isMobile = useMediaQuery('(max-width: 766px)')
+
   const itemStyles: CSSProperties = {
     display: 'flex',
     alignItems: 'start',
@@ -267,6 +286,11 @@ export const MenuItem = ({
     textOverflow: 'ellipsis',
   }
 
+  const itemInfoDetailMobileStyles: CSSProperties = {
+    ...itemInfoDetailStyles,
+    maxWidth: '217px',
+  }
+
   const itemInfoPriceStyles: CSSProperties = {
     fontWeight: '500',
     fontSize: '1rem',
@@ -289,7 +313,13 @@ export const MenuItem = ({
     <li style={itemStyles} onClick={onOpen}>
       <div style={itemInfoStyles}>
         <span style={itemInfoLabelStyles}>{name}</span>
-        {description && <p style={itemInfoDetailStyles}>{description}</p>}
+        {description && (
+          <p
+            style={isMobile ? itemInfoDetailMobileStyles : itemInfoDetailStyles}
+          >
+            {description}
+          </p>
+        )}
         <span style={itemInfoPriceStyles}>{price}</span>
       </div>
       <div style={itemImageContainerStyles}>

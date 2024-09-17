@@ -1,3 +1,6 @@
+'use client'
+
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { ReactNode } from 'react'
 
 interface MainContainerProps {
@@ -13,6 +16,16 @@ const menuContainerStyles = {
   gridTemplateColumns: '1fr 20rem',
 }
 
+const menuContainerMobileStyles = {
+  marginTop: '0.375rem',
+}
+
 export const MainContainer = ({ children }: MainContainerProps) => {
-  return <div style={menuContainerStyles}>{children}</div>
+  const isMobile = useMediaQuery('(max-width: 766px)')
+
+  return (
+    <div style={isMobile ? menuContainerMobileStyles : menuContainerStyles}>
+      {children}
+    </div>
+  )
 }
