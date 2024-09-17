@@ -27,6 +27,7 @@ export const Navbar = () => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: '0 auto',
   }
 
   const itemStyle = (path: string): CSSProperties => ({
