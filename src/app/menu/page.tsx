@@ -4,6 +4,7 @@ import { Banner } from '@/components/banner'
 import { Cart } from '@/components/cart'
 import { MainContainer } from '@/components/main-container'
 import { MenuRestaurant } from '@/components/menu'
+import { MenuFooter } from '@/components/menu-footer'
 import { Navbar } from '@/components/navbar'
 import { SearchInput } from '@/components/search-input'
 import { Wrapper } from '@/components/wrapper'
@@ -35,6 +36,8 @@ export default function Menu() {
           )}
         </MainContainer>
       </Wrapper>
+
+      {isMobile && currentScreen === 'menu' && <MenuFooter />}
     </>
   )
 }

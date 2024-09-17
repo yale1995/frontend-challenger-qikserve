@@ -96,7 +96,7 @@ export const Navbar = () => {
         </div>
       ) : (
         <div style={contentContainerMobileStyles}>
-          <h3 style={navHeadingStyles}>Menu</h3>
+          <h3 style={navHeadingStyles}> {t('navbar.menu')}</h3>
 
           <button style={buttonMenuStyles}>
             <HamburgerMenuIconRegular style={iconButtonStyles} />

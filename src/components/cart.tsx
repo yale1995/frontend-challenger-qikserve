@@ -3,16 +3,21 @@
 import { useCart } from '@/hooks/use-cart'
 import { useTheme } from '@/hooks/use-theme'
 import { CSSProperties } from 'react'
-import { MinusIconRegular, PlusIconRegular } from './icons'
+import { MinusIconRegular, PlusIconRegular, XIconRegular } from './icons'
 import { useFormatter, useTranslations } from 'next-intl'
 import { useSettings } from '@/hooks/use-settings'
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { useScreen } from '@/hooks/use-screen'
 
 export const Cart = () => {
+  const isMobile = useMediaQuery('(max-width: 766px)')
+
   const { cartItems, cartTotal } = useCart()
   const { theme } = useTheme()
   const format = useFormatter()
   const { settings } = useSettings()
   const t = useTranslations()
+  const { changeScreen } = useScreen()
 
   const cartContainerStyles: CSSProperties = {
     width: '100%',
@@ -23,6 +28,13 @@ export const Cart = () => {
 
   const headerStyles: CSSProperties = {
     padding: '1.25rem',
+  }
+
+  const headerMobileStyles: CSSProperties = {
+    padding: '1.25rem',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 1fr',
+    alignItems: 'center',
   }
 
   const headingStyles: CSSProperties = {
@@ -130,10 +142,26 @@ export const Cart = () => {
     color: 'var(--gray-800)',
   }
 
+  const buttonCloseStyles: CSSProperties = {
+    background: 'transparent',
+    border: '0',
+    outline: '0',
+    gridColumn: '3',
+    textAlign: 'end',
+  }
+
   return (
     <div style={cartContainerStyles}>
-      <header style={headerStyles}>
+      <header style={isMobile ? headerMobileStyles : headerStyles}>
         <h2 style={headingStyles}>{t('cart.title')}</h2>
+        {isMobile && (
+          <button
+            style={buttonCloseStyles}
+            onClick={() => changeScreen('menu')}
+          >
+            <XIconRegular />
+          </button>
+        )}
       </header>
 
       {cartItems.length > 0 ? (
