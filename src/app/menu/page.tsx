@@ -1,13 +1,19 @@
+'use client'
+
 import { Banner } from '@/components/banner'
 import { Cart } from '@/components/cart'
 import { MainContainer } from '@/components/main-container'
 import { MenuRestaurant } from '@/components/menu'
 import { Navbar } from '@/components/navbar'
-import { ReduxProvider } from '@/components/redux-provider'
 import { SearchInput } from '@/components/search-input'
 import { Wrapper } from '@/components/wrapper'
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { useScreen } from '@/hooks/use-screen'
 
-export default async function Menu() {
+export default function Menu() {
+  const isMobile = useMediaQuery('(max-width: 766px)')
+  const { currentScreen } = useScreen()
+
   return (
     <>
       <Navbar />
@@ -16,10 +22,17 @@ export default async function Menu() {
       <Wrapper>
         <SearchInput />
         <MainContainer>
-          <ReduxProvider>
-            <MenuRestaurant />
-            <Cart />
-          </ReduxProvider>
+          {isMobile ? (
+            <>
+              {currentScreen === 'menu' && <MenuRestaurant />}
+              {currentScreen === 'cart' && <Cart />}
+            </>
+          ) : (
+            <>
+              <MenuRestaurant />
+              <Cart />
+            </>
+          )}
         </MainContainer>
       </Wrapper>
     </>

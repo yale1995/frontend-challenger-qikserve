@@ -1,7 +1,7 @@
 'use client'
 
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 
 interface MainContainerProps {
   children: ReactNode
@@ -16,8 +16,9 @@ const menuContainerStyles = {
   gridTemplateColumns: '1fr 20rem',
 }
 
-const menuContainerMobileStyles = {
+const menuContainerMobileStyles: CSSProperties = {
   marginTop: '0.375rem',
+  height: '100%',
 }
 
 export const MainContainer = ({ children }: MainContainerProps) => {

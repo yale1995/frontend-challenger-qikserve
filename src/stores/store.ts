@@ -2,10 +2,12 @@
 
 import { configureStore } from '@reduxjs/toolkit'
 import cartReducer from './cart-slice'
+import screenReducer from './screen-slice'
 
 export const store = configureStore({
   reducer: {
     cart: cartReducer,
+    screen: screenReducer,
   },
 })
 

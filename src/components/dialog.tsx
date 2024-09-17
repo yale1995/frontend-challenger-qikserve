@@ -6,6 +6,8 @@ import { useFormatter, useTranslations } from 'next-intl'
 import { MenuItem, ModifierItem } from '@/@types/api-type'
 import { useSettings } from '@/hooks/use-settings'
 import { useCart } from '@/hooks/use-cart'
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { useScreen } from '@/hooks/use-screen'
 
 interface DialogProps {
   onClose: () => void
@@ -13,9 +15,12 @@ interface DialogProps {
 }
 
 export const Dialog = ({ onClose, item }: DialogProps) => {
+  const isMobile = useMediaQuery('(max-width: 766px)')
+
   const [modifierItem, setModifierItem] = useState<ModifierItem | null>(null)
   const [quantity, setQuantity] = useState(1)
   const { addToCart } = useCart()
+  const { changeScreen } = useScreen()
 
   const { theme } = useTheme()
   const { settings } = useSettings()
@@ -32,6 +37,12 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
     zIndex: '9999',
   }
 
+  const dialogOverlayMobileStyles: CSSProperties = {
+    ...dialogOverlayStyles,
+    alignItems: 'flex-start',
+    background: theme.backgroundColour,
+  }
+
   const contentContainerStyles: CSSProperties = {
     background: theme.backgroundColour,
     maxWidth: '30rem',
@@ -39,6 +50,11 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
     boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
     position: 'relative',
     textAlign: 'center',
+  }
+
+  const contentContainerMobileStyles: CSSProperties = {
+    ...contentContainerStyles,
+    boxShadow: 'none',
   }
 
   const orderBannerStyles: CSSProperties = {
@@ -239,11 +255,21 @@ export const Dialog = ({ onClose, item }: DialogProps) => {
     })
 
     onClose()
+
+    if (isMobile) {
+      changeScreen('cart')
+    }
   }
 
   return (
-    <div style={dialogOverlayStyles} onClick={onClose}>
-      <div style={contentContainerStyles} onClick={(e) => e.stopPropagation()}>
+    <div
+      style={isMobile ? dialogOverlayMobileStyles : dialogOverlayStyles}
+      onClick={onClose}
+    >
+      <div
+        style={isMobile ? contentContainerMobileStyles : contentContainerStyles}
+        onClick={(e) => e.stopPropagation()}
+      >
         {item?.images && (
           <div style={orderBannerStyles}>
             <button style={buttonCloseDialogStyles} onClick={onClose}>

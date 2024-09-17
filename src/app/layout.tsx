@@ -8,6 +8,7 @@ import { MenuProvider } from '@/contexts/menu-context'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { SettingsProvider } from '@/contexts/settings-contexts'
+import { ReduxProvider } from '@/components/redux-provider'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -50,15 +51,17 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className={roboto.className}>
-        <ThemeProvider themeData={webSettings}>
-          <MenuProvider menuData={menuData}>
-            <SettingsProvider settingsData={settings}>
-              <NextIntlClientProvider messages={messages}>
-                {children}
-              </NextIntlClientProvider>
-            </SettingsProvider>
-          </MenuProvider>
-        </ThemeProvider>
+        <ReduxProvider>
+          <ThemeProvider themeData={webSettings}>
+            <MenuProvider menuData={menuData}>
+              <SettingsProvider settingsData={settings}>
+                <NextIntlClientProvider messages={messages}>
+                  {children}
+                </NextIntlClientProvider>
+              </SettingsProvider>
+            </MenuProvider>
+          </ThemeProvider>
+        </ReduxProvider>
       </body>
     </html>
   )
