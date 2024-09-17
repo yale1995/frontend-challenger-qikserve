@@ -4,7 +4,7 @@ This is a white label restaurant menu application built as a test project for a 
 
 ![Captura de Tela 2024-09-16 às 17 12 00](https://github.com/user-attachments/assets/9b4cecaf-6dde-472e-bd95-2692e2568b2c)
 
-Production URL: https://frontend-challenger-qikserve-jkw47l89v-yale1995s-projects.vercel.app/
+Production URL: https://frontend-challenger-qikserve.vercel.app/menu
 
 ## Features
 
