@@ -14,5 +14,9 @@
   "cart": {
     "title": "Carrinho",
     "emptyCart": "Seu carrinho está vazio"
+  },
+  "menuFooter": {
+    "link": "Veja informações alérgicas",
+    "button": "Seu carrinho"
   }
 }

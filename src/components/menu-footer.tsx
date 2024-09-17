@@ -3,6 +3,7 @@
 import { useCart } from '@/hooks/use-cart'
 import { useScreen } from '@/hooks/use-screen'
 import { useTheme } from '@/hooks/use-theme'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { CSSProperties } from 'react'
 
@@ -10,6 +11,7 @@ export const MenuFooter = () => {
   const { theme } = useTheme()
   const { changeScreen } = useScreen()
   const { cartItems } = useCart()
+  const t = useTranslations()
 
   const addToCartButtonStyles: CSSProperties = {
     background: theme.primaryColour,
@@ -37,7 +39,7 @@ export const MenuFooter = () => {
     <footer style={{ background: 'var(--gray-100)' }}>
       <div style={{ padding: '1.5rem' }}>
         <Link style={linkStyles} href="">
-          View allergy information
+          {t('menuFooter.link')}
         </Link>
       </div>
 
@@ -46,7 +48,7 @@ export const MenuFooter = () => {
           style={addToCartButtonStyles}
           onClick={() => changeScreen('cart')}
         >
-          Your basket{' '}
+          {t('menuFooter.button')}{' '}
           {cartItems.length > 0 &&
             `• ${cartItems.length} ${cartItems.length > 1 ? 'items' : 'item'}`}
         </button>

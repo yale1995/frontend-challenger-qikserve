@@ -12,7 +12,11 @@
     "addToCartButton": "Add to Order"
   },
   "cart": {
-    "title": "Cart",
+    "title": "Basket",
     "emptyCart": "Your cart is empty"
+  },
+  "menuFooter": {
+    "link": "View allergy information",
+    "button": "Your basket"
   }
 }
